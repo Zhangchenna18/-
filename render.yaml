@@ -1,0 +1,26 @@
+# Render Blueprint — 青墙粉绘 · 乡村小学美育系统
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: meiyu-education
+    runtime: node
+    region: singapore
+    plan: starter
+    branch: main
+    buildCommand: NPM_CONFIG_PRODUCTION=false npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/announcements
+    autoDeploy: true
+  # 持久化作品数据与上传文件（重启/重新部署后不丢失）
+    disk:
+      name: meiyu-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
